@@ -1,5 +1,6 @@
 package skyglass.servicetemplate.service.account;
 
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -12,15 +13,15 @@ import java.util.function.Function;
 
 @Service
 @Slf4j
-@RequiredArgsConstructor
+@AllArgsConstructor
 class AccountServiceImpl implements AccountService {
 
 
-    private AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
 
-    private AuthenticatedUserSupplier authenticatedUserSupplier = AuthenticatedUserSupplier.EMPTY_SUPPLIER;
+    private final AuthenticatedUserSupplier authenticatedUserSupplier;
 
-    private AccountServiceObserver accountServiceObserver;
+    private final AccountServiceObserver accountServiceObserver;
 
     public AccountServiceCommandResult createAccount(Long initialBalance) {
         AccountCommandResult outcome = AccountCommandResult.createAccount(initialBalance, currentUserId());

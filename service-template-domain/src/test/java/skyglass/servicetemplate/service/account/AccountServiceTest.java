@@ -9,12 +9,13 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import skyglass.servicetemplate.domain.TestData;
 
 import java.util.Collections;
 
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension::class)
+@ExtendWith(MockitoExtension.class)
 class AccountServiceTest {
 
 
@@ -45,7 +46,7 @@ class AccountServiceTest {
 
         val outcome = accountService.createAccount(TestData.initialBalance);
 
-        Assertions.assertThat(outcome).isEqualTo(AccountServiceCommandResult.Success(savedAccount.value))
+        Assertions.assertThat(outcome).isEqualTo(new AccountServiceCommandResult.Success(savedAccount.getValue()));
     }
 
 }

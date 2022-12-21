@@ -1,69 +1,73 @@
-package skyglass.servicetemplate.service.account
+package skyglass.servicetemplate.service.account;
 
-import net.chrisrichardson.liveprojects.servicetemplate.domain.AccountCommandResult.*
-import net.chrisrichardson.liveprojects.servicetemplate.domain.TestData.balanceAfterCredit
-import net.chrisrichardson.liveprojects.servicetemplate.domain.TestData.balanceAfterDebit
-import net.chrisrichardson.liveprojects.servicetemplate.domain.TestData.creditAmount
-import net.chrisrichardson.liveprojects.servicetemplate.domain.TestData.debitAmount
-import net.chrisrichardson.liveprojects.servicetemplate.domain.TestData.initialBalance
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Test
+import lombok.val;
+import org.junit.jupiter.api.Test;
+import skyglass.servicetemplate.service.account.AccountCommandResult.AmountNotGreaterThanZero;
+import skyglass.servicetemplate.service.account.AccountCommandResult.BalanceExceeded;
 
-class AccountTest {
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static skyglass.servicetemplate.domain.TestData.balanceAfterCredit;
+import static skyglass.servicetemplate.domain.TestData.balanceAfterDebit;
+import static skyglass.servicetemplate.domain.TestData.creditAmount;
+import static skyglass.servicetemplate.domain.TestData.debitAmount;
+import static skyglass.servicetemplate.domain.TestData.initialBalance;
+import static skyglass.servicetemplate.service.account.AccountCommandResult.SUCCESS;
+
+public class AccountTest {
 
     @Test
-    fun shouldDebitAndCredit() {
-        val account = Account(initialBalance, "owner")
-        val result = account.debit(debitAmount)
+    public void shouldDebitAndCredit() {
+        val account = new Account(initialBalance, "owner");
+        val result = account.debit(debitAmount);
 
-        assertThat(result).isEqualTo(Success)
-        assertThat(account.balance).isEqualTo(balanceAfterDebit)
+        assertThat(result).isEqualTo(SUCCESS);
+        assertThat(account.getBalance()).isEqualTo(balanceAfterDebit);
 
-        val creditResult = account.credit(creditAmount)
-        assertThat(creditResult).isEqualTo(Success)
-        assertThat(account.balance).isEqualTo(balanceAfterCredit)
+        val creditResult = account.credit(creditAmount);
+        assertThat(creditResult).isEqualTo(SUCCESS);
+        assertThat(account.getBalance()).isEqualTo(balanceAfterCredit);
     }
 
     @Test
-    fun shouldDebitCurrentBalance() {
-        val account = Account(initialBalance, "owner")
-        val result = account.debit(initialBalance)
-        assertThat(result).isEqualTo(Success)
-        assertThat(account.balance).isEqualTo(0)
+    public void shouldDebitCurrentBalance() {
+        val account = new Account(initialBalance, "owner");
+        val result = account.debit(initialBalance);
+        assertThat(result).isEqualTo(SUCCESS);
+        assertThat(account.getBalance()).isEqualTo(0);
    }
 
     @Test
-    fun shouldDebitCurrentBalanceMinus1() {
-        val account = Account(initialBalance, "owner")
-        val result = account.debit(initialBalance - 1)
-        assertThat(result).isEqualTo(Success)
-        assertThat(account.balance).isEqualTo(1)
+    public void shouldDebitCurrentBalanceMinus1() {
+        val account = new Account(initialBalance, "owner");
+        val result = account.debit(initialBalance - 1);
+        assertThat(result).isEqualTo(SUCCESS);
+        assertThat(account.getBalance()).isEqualTo(1);
    }
 
     @Test
-    fun shouldDebitCurrentBalancePlusShouldFail() {
-        val account = Account(initialBalance, "owner")
-        val result = account.debit(initialBalance + 1)
-        assertThat(result).isEqualTo(BalanceExceeded(initialBalance + 1, initialBalance))
-        assertThat(account.balance).isEqualTo(initialBalance)
+    public void shouldDebitCurrentBalancePlusShouldFail() {
+        val account = new Account(initialBalance, "owner");
+        val result = account.debit(initialBalance + 1);
+        assertThat(result).isEqualTo(new BalanceExceeded(initialBalance + 1, initialBalance));
+        assertThat(account.getBalance()).isEqualTo(initialBalance);
    }
 
     @Test
-    fun debitZeroShouldFail() {
-        val account = Account(initialBalance, "owner")
-        val amount = 0L
-        val result = account.debit(amount)
-        assertThat(result).isEqualTo(AmountNotGreaterThanZero(amount))
-        assertThat(account.balance).isEqualTo(initialBalance)
+    public void debitZeroShouldFail() {
+        val account = new Account(initialBalance, "owner");
+        val amount = 0L;
+        val result = account.debit(amount);
+        assertThat(result).isEqualTo(new AmountNotGreaterThanZero(amount));
+        assertThat(account.getBalance()).isEqualTo(initialBalance);
    }
 
     @Test
-    fun creditZeroShouldFail() {
-        val account = Account(initialBalance, "owner")
-        val amount= 0L
-        val result = account.credit(amount)
-        assertThat(result).isEqualTo(AmountNotGreaterThanZero(amount))
-        assertThat(account.balance).isEqualTo(initialBalance)
+    public void creditZeroShouldFail() {
+        val account = new Account(initialBalance, "owner");
+        val amount= 0L;
+        val result = account.credit(amount);
+        assertThat(result).isEqualTo(new AmountNotGreaterThanZero(amount));
+        assertThat(account.getBalance()).isEqualTo(initialBalance);
    }
 
 }

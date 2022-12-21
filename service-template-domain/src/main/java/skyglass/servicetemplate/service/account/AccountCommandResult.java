@@ -2,12 +2,13 @@ package skyglass.servicetemplate.service.account;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 public interface AccountCommandResult {
 
     public static final AccountCommandResult SUCCESS = new Success();
-    public static final AccountCommandResult UNAUTHORIZED = new Unauthorized();
+    public static final AccountCommandResult UNAUTHORIZED = new UnauthorizedCommandResult();
 
     public static AccountCommandResult createAccount(Long balance, String owner) {
         if (balance <= 0) {
@@ -20,6 +21,7 @@ public interface AccountCommandResult {
     @Getter
     @Builder
     @AllArgsConstructor
+    @EqualsAndHashCode
     public static class AccountCreationSuccessful implements AccountCommandResult {
 
         private Account account;
@@ -29,6 +31,7 @@ public interface AccountCommandResult {
     @Getter
     @Builder
     @AllArgsConstructor
+    @EqualsAndHashCode
     public static class AmountNotGreaterThanZero implements AccountCommandResult {
 
         private Long amount;
@@ -37,6 +40,7 @@ public interface AccountCommandResult {
     @Getter
     @Builder
     @AllArgsConstructor
+    @EqualsAndHashCode
     public static class BalanceExceeded implements AccountCommandResult {
 
         private Long amount;
@@ -50,7 +54,7 @@ class Success implements AccountCommandResult {
 
 }
 
-class Unauthorized implements AccountCommandResult {
+class UnauthorizedCommandResult implements AccountCommandResult {
 }
 
 
