@@ -7,6 +7,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @SpringBootTest(classes = {AccountServiceIntegrationTest.class, AccountServiceIntegrationTest.Config.class})
+@MockBean({
+        AuthenticatedUserSupplier.class,
+        AccountServiceObserver.class
+})
 class AccountServiceIntegrationTest {
 
     private AccountService accountService;
